@@ -1,0 +1,87 @@
+.glass-navbar {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.brand-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  color: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.35);
+}
+
+.navbar-brand {
+  color: #1a1a2e !important;
+  font-size: 1.35rem;
+  letter-spacing: -0.5px;
+}
+
+.nav-link {
+  color: #495057 !important;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background: rgba(13, 110, 253, 0.08);
+  color: #0d6efd !important;
+}
+
+.nav-link.active {
+  background: linear-gradient(135deg, #0d6efd, #6610f2);
+  color: white !important;
+  box-shadow: 0 4px 14px rgba(13, 110, 253, 0.35);
+}
+
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme */
+:host-context(body.dark-theme) {
+  .glass-navbar {
+    background: rgba(22, 27, 34, 0.85);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .navbar-brand {
+    color: #f0f6fc !important;
+  }
+
+  .nav-link {
+    color: #c9d1d9 !important;
+  }
+
+  .nav-link:hover {
+    background: rgba(56, 139, 253, 0.15);
+    color: #58a6ff !important;
+  }
+
+  .theme-toggle {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}

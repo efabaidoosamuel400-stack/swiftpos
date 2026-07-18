@@ -1,0 +1,18 @@
+.product-card {
+  overflow: hidden;
+}
+
+.product-card .card-body {
+  padding: 0.9rem;
+}
+
+.list-group-item {
+  background: transparent;
+  border-color: var(--border-soft, rgba(0,0,0,0.06));
+}
+
+.input-group-text {
+  background: var(--card-bg);
+  border-color: var(--border-soft);
+  color: var(--text-muted);
+}

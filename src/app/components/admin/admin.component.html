@@ -1,0 +1,217 @@
+<div class="row g-4">
+  <!-- Header -->
+  <div class="col-12">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <h4 class="mb-0 fw-bold">
+        <i class="bi bi-speedometer2 me-2"></i>Admin & Reports
+      </h4>
+      <button class="btn btn-primary" (click)="openAddModal()">
+        <i class="bi bi-plus-lg me-1"></i> Add Product
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="col-md-3 col-6">
+    <div class="stat-card">
+      <div class="stat-label">Total Revenue</div>
+      <div class="stat-value text-primary">${{ report.totalRevenue.toFixed(2) }}</div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="stat-card">
+      <div class="stat-label">Total Cost</div>
+      <div class="stat-value text-warning">${{ report.totalCost.toFixed(2) }}</div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="stat-card">
+      <div class="stat-label">Net Profit</div>
+      <div class="stat-value" [class.text-success]="report.profit >= 0" [class.text-danger]="report.profit < 0">
+        ${{ report.profit.toFixed(2) }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="stat-card">
+      <div class="stat-label">Sales Count</div>
+      <div class="stat-value">{{ report.salesCount }}</div>
+    </div>
+  </div>
+
+  <!-- Profit Report Card -->
+  <div class="col-lg-7">
+    <div class="card h-100">
+      <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <span><i class="bi bi-graph-up-arrow me-2"></i>Profit Report</span>
+        <div class="d-flex gap-2 align-items-center">
+          <input type="date" class="form-control form-control-sm" style="width: auto;"
+                 [(ngModel)]="startDate" (change)="generateReport()">
+          <span class="text-muted">to</span>
+          <input type="date" class="form-control form-control-sm" style="width: auto;"
+                 [(ngModel)]="endDate" (change)="generateReport()">
+          <button class="btn btn-sm btn-outline-primary" (click)="generateReport()">
+            <i class="bi bi-arrow-clockwise"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div style="height: 260px;">
+          <canvas #profitChart></canvas>
+        </div>
+        <div *ngIf="report.salesCount === 0" class="text-center text-muted mt-3 small">
+          No sales in the selected date range. Make some sales first!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Sales List -->
+  <div class="col-lg-5">
+    <div class="card h-100">
+      <div class="card-header">
+        <i class="bi bi-receipt me-2"></i>All Transactions
+      </div>
+      <div class="card-body p-0" style="max-height: 340px; overflow-y: auto;">
+        <div *ngIf="sales.length === 0" class="empty-state">
+          <i class="bi bi-inbox"></i>
+          <p class="mb-0">No transactions yet.</p>
+        </div>
+        <table class="table table-hover mb-0" *ngIf="sales.length > 0">
+          <thead class="sticky-top" style="background: var(--card-bg);">
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Items</th>
+              <th class="text-end">Revenue</th>
+              <th class="text-end">Profit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of sales">
+              <td>{{ s.id }}</td>
+              <td class="small">{{ s.date | date:'MMM d, HH:mm' }}</td>
+              <td>{{ s.items.length }}</td>
+              <td class="text-end">${{ s.totalRevenue.toFixed(2) }}</td>
+              <td class="text-end fw-semibold" [class.text-success]="s.profit >= 0">
+                ${{ s.profit.toFixed(2) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Management -->
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-box-seam me-2"></i>Product Inventory</span>
+        <span class="badge bg-secondary">{{ products.length }} products</span>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th class="text-end">Cost</th>
+                <th class="text-end">Selling</th>
+                <th class="text-center">Stock</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of products">
+                <td>
+                  <img [src]="p.image || 'https://picsum.photos/seed/' + p.id + '/60/60'"
+                       alt="" width="48" height="48" class="rounded"
+                       style="object-fit: cover;"
+                       (error)="$any($event.target).src='https://via.placeholder.com/48'">
+                </td>
+                <td class="fw-semibold">{{ p.name }}</td>
+                <td><span class="badge bg-light text-dark">{{ p.category || 'General' }}</span></td>
+                <td class="text-end">${{ p.costPrice.toFixed(2) }}</td>
+                <td class="text-end fw-semibold">${{ p.sellingPrice.toFixed(2) }}</td>
+                <td class="text-center">
+                  <span class="badge rounded-pill"
+                        [class.bg-danger]="isLowStock(p.stock)"
+                        [class.low-stock-badge]="isLowStock(p.stock)"
+                        [class.bg-success]="!isLowStock(p.stock) && p.stock > 0"
+                        [class.bg-secondary]="p.stock === 0">
+                    {{ p.stock }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-primary me-1" (click)="openEditModal(p)">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteProduct(p.id)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product Modal -->
+<div class="modal fade show d-block" tabindex="-1" *ngIf="showProductModal"
+     style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ editingProduct ? 'Edit Product' : 'Add New Product' }}
+        </h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <form [formGroup]="productForm" (ngSubmit)="saveProduct()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Product Name *</label>
+            <input type="text" class="form-control" formControlName="name"
+                   [class.is-invalid]="productForm.get('name')?.invalid && productForm.get('name')?.touched">
+            <div class="invalid-feedback">Name is required (min 2 characters).</div>
+          </div>
+          <div class="row g-3">
+            <div class="col-6">
+              <label class="form-label">Cost Price *</label>
+              <input type="number" step="0.01" class="form-control" formControlName="costPrice">
+            </div>
+            <div class="col-6">
+              <label class="form-label">Selling Price *</label>
+              <input type="number" step="0.01" class="form-control" formControlName="sellingPrice">
+            </div>
+            <div class="col-6">
+              <label class="form-label">Stock Quantity *</label>
+              <input type="number" class="form-control" formControlName="stock">
+            </div>
+            <div class="col-6">
+              <label class="form-label">Category</label>
+              <input type="text" class="form-control" formControlName="category">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Image URL (optional)</label>
+              <input type="text" class="form-control" formControlName="image"
+                     placeholder="https://...">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">
+            {{ editingProduct ? 'Update' : 'Add Product' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

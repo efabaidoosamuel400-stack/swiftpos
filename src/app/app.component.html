@@ -1,0 +1,54 @@
+<!-- Modern Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top glass-navbar">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/sales">
+      <div class="brand-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+        </svg>
+      </div>
+      <span class="fw-bold">SwiftPOS</span>
+    </a>
+
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
+        <li class="nav-item">
+          <a class="nav-link px-3 rounded-pill" routerLink="/sales" routerLinkActive="active">
+            <i class="bi bi-cart3 me-1"></i> Sale Entry
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3 rounded-pill" routerLink="/admin" routerLinkActive="active">
+            <i class="bi bi-gear me-1"></i> Admin / Reports
+          </a>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-sm theme-toggle" (click)="toggleTheme()" title="Toggle dark / light mode">
+          <span *ngIf="!isDarkMode">🌙</span>
+          <span *ngIf="isDarkMode">☀️</span>
+        </button>
+        <span class="badge bg-primary-subtle text-primary-emphasis px-3 py-2 rounded-pill">
+          Level 200 • BTCT 208
+        </span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container-fluid px-3 px-md-4 py-4">
+  <router-outlet></router-outlet>
+</main>
+
+<!-- Footer -->
+<footer class="text-center py-3 text-muted small">
+  <div class="container">
+    SwiftPOS Management System • Built with Angular + Bootstrap 5 • Kumasi Technical Institute
+  </div>
+</footer>
