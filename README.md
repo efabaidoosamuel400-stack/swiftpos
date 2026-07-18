@@ -1,7 +1,7 @@
 # SwiftPOS – Point of Sale Management System
 
 **Course:** BTCT 208 Web Development Frameworks  
-**Institution:** Kumasi Technical Institute  
+**Institution:** Kumasi Technical University  
 **Level:** 200  
 
 A modern, responsive Point of Sale system built with **Angular 19 (standalone components)** and **Bootstrap 5**.
@@ -91,7 +91,3 @@ src/app/
 - [x] Responsive Bootstrap UI
 - [x] Clean service-based architecture
 - [x] Dark mode + modern styling
-
----
-
-**Built for the 1-week assignment – ready to impress.**
